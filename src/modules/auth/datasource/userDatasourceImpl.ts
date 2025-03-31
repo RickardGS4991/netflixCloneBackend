@@ -21,7 +21,6 @@ export class UserDatasource implements IUserDatasource{
     async registerUser(info: UserInfo): Promise<any> {
         try {
             const { data, error } = await supabase.auth.signUp(info);
-            console.error(error);
             if(!data){
                 return null;
             }
