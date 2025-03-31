@@ -1,0 +1,62 @@
+
+import { Request, Response } from 'express';
+import { UserInfo } from "../model/userInfo";
+import { IUserDatasource } from '../interfaces/iUserDatasource';
+
+export class AuthController {
+    constructor(private datasource: IUserDatasource) {}
+
+    async register(req: Request, res: Response) {
+        try {
+            const registerUser: UserInfo = req.body;
+            console.log(registerUser);
+            if(!registerUser){
+                res.status(400).json({data: null, message: `Error`});
+                return;
+            }
+            const user = await this.datasource.registerUser(registerUser);
+            console.log(user);
+            if(!user){
+                res.status(404).json({data:null, message: `error on server`});
+                return;
+            }
+
+            console.log(user);
+
+            res.status(201).json({data: user, message: `Request correctly made it`});
+        } catch (error) {
+            res.status(500).json({data: null, message: `Error on server`});
+        }
+    }
+
+    async login(req: Request, res: Response){
+        try {
+            const loginInfo: UserInfo = req.body;
+            if(!loginInfo){
+                res.status(400).json({data: null, message: `Error`});
+                return;
+            }
+            const user = await this.datasource.login(loginInfo);
+            if(!user){
+                res.status(404).json({data:null, message: `error on server`});
+                return;
+            }
+            res.status(201).json({data: user, message: `Request correctly made it`});
+        } catch (error) {
+            res.status(500).json({data: null, message: `Error on server`});
+        }
+    }
+
+    async logout(req: Request, res: Response){
+        try {
+            const token = req.headers.authorization?.split(' ')[1];
+            if(!token){
+                throw new Error(`Headers not available`);
+            }
+
+            
+        } catch (error) {
+            res.status(500).send();
+        }
+    }
+}
