@@ -1,5 +1,6 @@
 import { supabase } from "../../../config";
 import { IUserDatasource } from "../interfaces/iUserDatasource";
+import { ImagePath } from "../model/imagesPaths";
 import { LoginResponse } from "../model/login";
 import { UserInfo } from "../model/userInfo";
 
@@ -30,7 +31,18 @@ export class UserDatasource implements IUserDatasource{
         }
     }
 
-    async logout(info: string): Promise<any> {
-        
+    async imageProfile(userId: any): Promise<void> {
+        try {
+            let arrImg = [ImagePath.image1, ImagePath.image2, ImagePath.image3];
+            let randomCode = Math.floor(Math.random() * 3);
+
+            await supabase.from("imagesProfile").insert([{
+                id: userId,
+                image_path: arrImg[randomCode]
+            }]);
+
+        } catch (error) {
+            throw new Error("Error on server");
+        }
     }
 };

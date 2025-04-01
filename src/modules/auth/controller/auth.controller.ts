@@ -15,13 +15,12 @@ export class AuthController {
                 return;
             }
             const user = await this.datasource.registerUser(registerUser);
-            console.log(user);
             if(!user){
                 res.status(404).json({data:null, message: `error on server`});
                 return;
             }
 
-            console.log(user);
+            await this.datasource.imageProfile(user.id);
 
             res.status(201).json({data: user, message: `Request correctly made it`});
         } catch (error) {
