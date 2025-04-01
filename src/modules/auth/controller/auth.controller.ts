@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import { UserInfo } from "../model/userInfo";
 import { IUserDatasource } from '../interfaces/iUserDatasource';
+import { LoginResponse } from '../model/login';
 
 export class AuthController {
     constructor(private datasource: IUserDatasource) {}
@@ -9,7 +10,6 @@ export class AuthController {
     async register(req: Request, res: Response) {
         try {
             const registerUser: UserInfo = req.body;
-            console.log(registerUser);
             if(!registerUser){
                 res.status(400).json({data: null, message: `Error`});
                 return;
@@ -35,11 +35,19 @@ export class AuthController {
                 res.status(400).json({data: null, message: `Error`});
                 return;
             }
-            const user = await this.datasource.login(loginInfo);
+            const user: LoginResponse = await this.datasource.login(loginInfo);
             if(!user){
                 res.status(404).json({data:null, message: `error on server`});
                 return;
             }
+
+            let imagePath = await this.datasource.getImageProfile(user.userId);
+            if(!imagePath){
+                res.status(404).json({data:null, message: `error on server`});
+                return;
+            }
+
+            user.imagePath = imagePath;
             res.status(201).json({data: user, message: `Request correctly made it`});
         } catch (error) {
             res.status(500).json({data: null, message: `Error on server`});

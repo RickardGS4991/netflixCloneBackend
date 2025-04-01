@@ -1,4 +1,6 @@
 export interface LoginResponse{
+    userId: string,
     accessToken: string,
-    refreshToken: string
+    refreshToken: string,
+    imagePath?: string
 }

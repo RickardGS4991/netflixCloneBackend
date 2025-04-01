@@ -12,7 +12,7 @@ export class UserDatasource implements IUserDatasource{
                 return null;
             }
 
-            let success: LoginResponse = { accessToken: data.session!.access_token, refreshToken: data.session!.refresh_token};
+            let success: LoginResponse = { userId: data.user!.id, accessToken: data.session!.access_token, refreshToken: data.session!.refresh_token};
             return success;
         } catch (error) {
             throw new Error('Unable to retrieve info from server');
@@ -31,18 +31,37 @@ export class UserDatasource implements IUserDatasource{
         }
     }
 
+    async getImageProfile(userId: string): Promise<string | null> {
+        try {
+            const { data, error} = await supabase.from('images_profile').select('image_path').eq('id', userId);
+            if(error){
+                return null;
+            }
+
+            return data[0].image_path;
+
+        } catch (error) {
+            throw new Error(`Error on server`);
+        }
+    }
+
     async imageProfile(userId: any): Promise<void> {
         try {
             let arrImg = [ImagePath.image1, ImagePath.image2, ImagePath.image3];
             let randomCode = Math.floor(Math.random() * 3);
 
-            await supabase.from("imagesProfile").insert([{
+            let { error } = await supabase.from("images_profile").insert([{
                 id: userId,
                 image_path: arrImg[randomCode]
             }]);
+
+            if(error){
+                console.error(error);
+            }
 
         } catch (error) {
             throw new Error("Error on server");
         }
     }
+    
 };
