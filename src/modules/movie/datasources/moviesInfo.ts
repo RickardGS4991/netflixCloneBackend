@@ -16,7 +16,7 @@ export class MoviesInfoImpl implements IMoviesInfo{
             throw new Error(`Unable to retrieve information from API : ${popularMovies.statusText}`);
         }
 
-        return popularMovies.data
+        return popularMovies.data.results;
         
     } catch (error) {
         throw new Error(`Error on server TMDB: ${error}`);
@@ -40,6 +40,44 @@ export class MoviesInfoImpl implements IMoviesInfo{
 
             return randomMovie;
         } catch (error: any) {
+            throw new Error(`Error on server TMDB: ${error}`);
+        }
+    }
+
+    async getTrailerMovie(id: string): Promise<any> {
+        try {
+            const options = {
+                headers: {
+                  accept: 'application/json',
+                  Authorization: 'Bearer '+process.env.TOKEN_MOVIES
+                }
+              };
+
+              let trailerMovie = await axios.get(TMBDURL.urlTrailerAndDetails+`/${id}/videos?language=en-US`, options);
+              if(trailerMovie.status !== 200){
+                return null;
+              }
+              return trailerMovie.data.results;
+        } catch (error) {
+            throw new Error(`Error on server TMDB: ${error}`);
+        }
+    }
+
+    async getMovieDetails(id: string): Promise<any>{
+        try {
+            const options = {
+                headers: {
+                  accept: 'application/json',
+                  Authorization: 'Bearer '+process.env.TOKEN_MOVIES
+                }
+              };
+
+            let detailsMovie = await axios.get(TMBDURL.urlTrailerAndDetails+`/${id}?language=en-US`, options);
+            if(detailsMovie.status !== 200){
+                return null;
+            }
+            return detailsMovie.data;
+        } catch (error) {
             throw new Error(`Error on server TMDB: ${error}`);
         }
     }
