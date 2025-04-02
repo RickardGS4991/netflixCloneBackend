@@ -41,7 +41,6 @@ export class MovieInfoController {
     async getDetailsMovie(req: Request, res: Response): Promise<void>{
         try {
             let id = String(req.params.id);
-            console.log(id);
 
             let trailer = await this.datasource.getMovieDetails(id);
             if(!trailer){
