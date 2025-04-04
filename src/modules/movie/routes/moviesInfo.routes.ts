@@ -10,5 +10,7 @@ movieRouter.get('/v1/api/movie_popular', movieController.getPopularMovies.bind(m
 movieRouter.get('/v1/api/movie_trending', movieController.getTrendingMovies.bind(movieController));
 movieRouter.get('/v1/api/:id/trailer', movieController.getTrailerMovie.bind(movieController));
 movieRouter.get('/v1/api/:id/details', movieController.getDetailsMovie.bind(movieController));
+movieRouter.get('/v1/api/:id/similar', movieController.getSimilarMovies.bind(movieController));
+movieRouter.get('/v1/api/:category', movieController.getCategories.bind(movieController));
 
 export default movieRouter;
