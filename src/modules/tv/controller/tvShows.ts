@@ -43,19 +43,19 @@ export class TVShowsController {
             }
         
             let url = TVDB.urlCommon + `/${id}?language=en-US`;
-            let trailer = await this.datasource.getTvShowInfo(url);
-            if(!trailer){
+            let details = await this.datasource.getTvShowInfo(url);
+            if(!details){
                res.status(404).json({data: null, message: `Error on server`});
                return;
             }
         
-            res.status(201).json({data: trailer.results, message:`Request completed correctly`});
+            res.status(201).json({data: details.results, message:`Request completed correctly`});
         } catch (error) {
             res.status(500).json({data: null, message: `Error on server`});
         }
     }
 
-    async getSimilarTvs(req: Request, res: Response): Promise<any>{
+    async getSimilarTvs(req: Request, res: Response){
         try {
             let id = String(req.params.id);
             if(!id){
@@ -63,13 +63,33 @@ export class TVShowsController {
             }
         
             let url = TVDB.urlCommon + `/${id}/similar?language=en-US&page=1`;
-            let trailer = await this.datasource.getTvShowInfo(url);
-            if(!trailer){
+            let similar = await this.datasource.getTvShowInfo(url);
+            if(!similar){
                res.status(404).json({data: null, message: `Error on server`});
                return;
             }
         
-            res.status(201).json({data: trailer.results, message:`Request completed correctly`});
+            res.status(201).json({data: similar.results, message:`Request completed correctly`});
+        } catch (error) {
+            res.status(500).json({data: null, message: `Error on server`});
+        }
+    }
+
+    async getTvCategories(req: Request, res: Response): Promise<void>{
+        try {
+            let categories = String(req.params.category);
+            if(!categories){
+                res.status(404).json({data: null, message: `Id not available`});
+            }
+        
+            let url = TVDB.urlCommon + `/${categories}?language=en-US&page=1`;
+            let category = await this.datasource.getTvShowInfo(url);
+            if(!category){
+               res.status(404).json({data: null, message: `Error on server`});
+               return;
+            }
+        
+            res.status(201).json({data: category.results, message:`Request completed correctly`});
         } catch (error) {
             res.status(500).json({data: null, message: `Error on server`});
         }

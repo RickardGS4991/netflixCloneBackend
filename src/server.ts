@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import authRouter from './modules/auth/routes/auth.routes';
 import movieRouter from './modules/movie/routes/moviesInfo.routes';
+import tvRouter from './modules/tv/routes/tvShows.routes';
 
 const server = express()
 
@@ -25,5 +26,6 @@ server.use('/v1', bodyParser.urlencoded({extended: true}));
 
 server.use(authRouter);
 server.use(movieRouter);
+server.use(tvRouter);
 
 export default server;
