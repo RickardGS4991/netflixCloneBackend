@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import { Request, Response } from "express";
 import { IMoviesInfo } from "../interfaces/iMoviesInfo";
 import { TMBDURL } from "../model/urlTMBD";
 
