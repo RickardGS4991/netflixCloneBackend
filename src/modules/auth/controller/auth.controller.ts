@@ -53,17 +53,4 @@ export class AuthController {
             res.status(500).json({data: null, message: `Error on server`});
         }
     }
-
-    async logout(req: Request, res: Response){
-        try {
-            const token = req.headers.authorization?.split(' ')[1];
-            if(!token){
-                throw new Error(`Headers not available`);
-            }
-
-            
-        } catch (error) {
-            res.status(500).send();
-        }
-    }
 }
