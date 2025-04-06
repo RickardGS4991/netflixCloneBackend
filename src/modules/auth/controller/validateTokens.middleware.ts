@@ -11,6 +11,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
   const token = authHeader.split(' ')[1];
 
   const decoded: any = jwt.decode(token);
+  console.log(decoded);
 
   if (!decoded || !decoded.exp) {
     return res.status(401).json({ message: 'Invalid token' });

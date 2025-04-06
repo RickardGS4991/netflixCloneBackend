@@ -2,10 +2,9 @@ import { supabase } from "../../../config";
 import { IUserDatasource } from "../interfaces/iUserDatasource";
 import { ImagePath } from "../model/imagesPaths";
 import { LoginResponse } from "../model/login";
-import { UserInfo } from "../model/userInfo";
 
 export class UserDatasource implements IUserDatasource{
-    async login(info: UserInfo): Promise<LoginResponse | null> {
+    async login(info: any): Promise<LoginResponse | null> {
         try {
             const { data, error } = await supabase.auth.signInWithPassword(info);
             if(!data){
@@ -19,7 +18,7 @@ export class UserDatasource implements IUserDatasource{
         }
     }
 
-    async registerUser(info: UserInfo): Promise<any> {
+    async registerUser(info: any): Promise<any> {
         try {
             const { data, error } = await supabase.auth.signUp(info);
             if(!data){
@@ -31,28 +30,29 @@ export class UserDatasource implements IUserDatasource{
         }
     }
 
-    async getImageProfile(userId: string): Promise<string | null> {
+    async getImageProfile(userId: string): Promise<any> {
         try {
-            const { data, error} = await supabase.from('images_profile').select('image_path').eq('id', userId);
+            const { data, error} = await supabase.from('user_data').select('image_path, username').eq('id', userId);
             if(error){
                 return null;
             }
 
-            return data[0].image_path;
+            return data[0];
 
         } catch (error) {
             throw new Error(`Error on server`);
         }
     }
 
-    async imageProfile(userId: any): Promise<void> {
+    async imageProfile(dataFromUser: any): Promise<void> {
         try {
             let arrImg = [ImagePath.image1, ImagePath.image2, ImagePath.image3];
             let randomCode = Math.floor(Math.random() * 3);
 
-            let { error } = await supabase.from("images_profile").insert([{
-                id: userId,
-                image_path: arrImg[randomCode]
+            let { error } = await supabase.from("user_data").insert([{
+                id: dataFromUser.userId,
+                image_path: arrImg[randomCode],
+                username: dataFromUser.username
             }]);
 
             if(error){

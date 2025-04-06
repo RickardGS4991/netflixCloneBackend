@@ -1,4 +1,7 @@
 export interface UserInfo{
-    email: string,
-    password: string
+    data: {
+        email: string,
+        password: string,
+    }
+    username: string
 };

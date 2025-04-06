@@ -14,13 +14,18 @@ export class AuthController {
                 res.status(400).json({data: null, message: `Error`});
                 return;
             }
-            const user = await this.datasource.registerUser(registerUser);
+            const user = await this.datasource.registerUser(registerUser.data);
             if(!user){
                 res.status(404).json({data:null, message: `error on server`});
                 return;
             }
 
-            await this.datasource.imageProfile(user.id);
+            let dataFromUser = {
+                userId: user.id,
+                username: registerUser.username
+            };
+
+            await this.datasource.imageProfile(dataFromUser);
 
             res.status(201).json({data: user, message: `Request correctly made it`});
         } catch (error) {
@@ -41,14 +46,13 @@ export class AuthController {
                 return;
             }
 
-            let imagePath = await this.datasource.getImageProfile(user.userId);
-            if(!imagePath){
+            let data = await this.datasource.getImageProfile(user.userId);
+            if(!data){
                 res.status(404).json({data:null, message: `error on server`});
                 return;
             }
 
-            user.imagePath = imagePath;
-            res.status(201).json({data: user, message: `Request correctly made it`});
+            res.status(201).json({data: data, message: `Request correctly made it`});
         } catch (error) {
             res.status(500).json({data: null, message: `Error on server`});
         }
