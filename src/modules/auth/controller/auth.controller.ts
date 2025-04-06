@@ -52,7 +52,14 @@ export class AuthController {
                 return;
             }
 
-            res.status(201).json({data: data, message: `Request correctly made it`});
+            let finalResponse = {
+                accessToken: user.accessToken,
+                refreshToken: user.refreshToken,
+                imagePath: data.image_path,
+                username: data.username
+            }
+
+            res.status(201).json({data: finalResponse, message: `Request correctly made it`});
         } catch (error) {
             res.status(500).json({data: null, message: `Error on server`});
         }
